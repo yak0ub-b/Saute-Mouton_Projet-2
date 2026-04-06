@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapport — Saute Mouton</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+      line-height: 1.7;
+    }
+    h1 { font-size: 2em; border-bottom: 3px solid #4caf50; padding-bottom: 8px; }
+    h2 { font-size: 1.4em; color: #2d6a2d; margin-top: 2em; border-left: 4px solid #4caf50; padding-left: 10px; }
+    h3 { font-size: 1.1em; color: #444; }
+    code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 0.95em; }
+    pre { background: #f4f4f4; padding: 14px; border-radius: 5px; overflow-x: auto; font-size: 0.9em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+    th { background: #4caf50; color: white; padding: 8px 12px; text-align: left; }
+    td { padding: 8px 12px; border-bottom: 1px solid #ddd; }
+    tr:nth-child(even) td { background: #f9f9f9; }
+    .info-box { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 5px; padding: 14px 18px; margin: 1em 0; }
+    .warn-box { background: #fff8e1; border: 1px solid #ffe082; border-radius: 5px; padding: 14px 18px; margin: 1em 0; }
+    .bug { color: #c62828; font-weight: bold; }
+    footer { margin-top: 3em; font-size: 0.85em; color: #888; border-top: 1px solid #ddd; padding-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h1>Saute Mouton — Rapport de projet</h1>
+
+<div class="info-box">
+  <strong>Étudiants :</strong> [Prénom NOM] &amp; [Prénom NOM]<br>
+  <strong>Groupe de TP :</strong> [À compléter]<br>
+  <strong>Université :</strong> Gustave Eiffel — L1 Informatique 2025-2026<br>
+  <strong>Lancement :</strong> <code>python3 sautemouton.py</code>
+</div>
+
+<!-- ================================================================ -->
+<h2>1. Guide utilisateur</h2>
+
+<h3>Lancement</h3>
+<pre>python3 sautemouton.py</pre>
+<p>Aucune dépendance externe : seuls <code>fltk.py</code> (fourni) et la bibliothèque standard Python sont nécessaires.</p>
+
+<h3>Contrôles</h3>
+<table>
+  <tr><th>Action</th><th>Commande</th></tr>
+  <tr><td>Viser</td><td>Clic gauche — verrouille la direction de saut</td></tr>
+  <tr><td>Sauter</td><td>Clic droit — lance le mouton vers la cible verrouillée</td></tr>
+  <tr><td>Quitter</td><td>Touche <code>Échap</code> ou fermer la fenêtre</td></tr>
+</table>
+
+<h3>Objectif</h3>
+<p>Faire atteindre le mouton (personnage rond) au plateau-cible en enchaînant des sauts. La puissance du saut est proportionnelle à la distance entre le mouton et le point cliqué (plafonnée à <code>MAX_RAYON = 150 px</code>).</p>
+
+<h3>Types de plateformes</h3>
+<table>
+  <tr><th>Couleur</th><th>Type</th><th>Comportement</th></tr>
+  <tr><td style="background:#4caf50;color:white;">Vert</td><td>Normale</td><td>Le mouton s'arrête en atterrissant, glisse le long des murs</td></tr>
+  <tr><td style="background:#5c3317;color:white;">Brun (C)</td><td>Collante</td><td>Le mouton colle quelle que soit la face touchée</td></tr>
+  <tr><td style="background:#4dd0e1;color:white;">Bleu glace (G)</td><td>Glissante</td><td>Le mouton glisse horizontalement sans freiner</td></tr>
+</table>
+
+<h3>Niveaux</h3>
+<p>3 niveaux sont disponibles. Le jeu passe automatiquement au niveau suivant après chaque victoire. Après le niveau 3, on recommence depuis le début.</p>
+
+<!-- ================================================================ -->
+<h2>2. État d'avancement</h2>
+
+<table>
+  <tr><th>Fonctionnalité</th><th>État</th></tr>
+  <tr><td><code>charge_niveau()</code> — lecture des fichiers .txt</td><td>✅ Terminé</td></tr>
+  <tr><td><code>pas_physique()</code> — gravité et déplacement</td><td>✅ Terminé</td></tr>
+  <tr><td><code>collision()</code> — détection cercle/rectangle</td><td>✅ Terminé</td></tr>
+  <tr><td><code>choc()</code> — choc mou avec correction de position</td><td>✅ Terminé</td></tr>
+  <tr><td><code>clic_vers_vitesse()</code> — visée à la souris</td><td>✅ Terminé</td></tr>
+  <tr><td><code>victoire()</code> — détection de l'arrivée</td><td>✅ Terminé</td></tr>
+  <tr><td>3 niveaux jouables</td><td>✅ Terminé</td></tr>
+  <tr><td>Plateformes collantes / glissantes</td><td>✅ Terminé</td></tr>
+  <tr><td>Flèche de visée + traînée</td><td>✅ Terminé</td></tr>
+  <tr><td>Sprites PNG (mouton, cible)</td><td>✅ Terminé</td></tr>
+  <tr><td>Fond et couleurs par type de plateforme</td><td>✅ Terminé</td></tr>
+  <tr><td>Reset si chute hors écran</td><td>⬜ À faire</td></tr>
+  <tr><td>Menu de sélection de niveau</td><td>⬜ À faire</td></tr>
+  <tr><td>Compteur de sauts</td><td>⬜ À faire</td></tr>
+  <tr><td>Trajectoire prévisionnelle (bonus)</td><td>⬜ À faire</td></tr>
+  <tr><td>Solveur automatique (bonus)</td><td>⬜ À faire</td></tr>
+</table>
+
+<div class="warn-box">
+  <strong>Bug connu :</strong> si le mouton tombe hors de l'écran, le niveau ne redémarre pas automatiquement — il faut relancer le programme. Ce bug sera corrigé dans la prochaine version.
+</div>
+
+<!-- ================================================================ -->
+<h2>3. Description des fonctions importantes</h2>
+
+<h3><code>_collision_bloc(personnage, bloc)</code></h3>
+<p>Helper interne. Calcule le vecteur normal de collision et la profondeur d'interpénétration entre le cercle (personnage) et un seul rectangle (bloc), en trouvant le point du rectangle le plus proche du centre du cercle. Si le centre est à l'intérieur du rectangle (distance nulle), on utilise le principe SAT pour choisir l'axe de moindre chevauchement. Retourne <code>(nx, ny, penetration)</code> ou <code>None</code>.</p>
+
+<h3><code>collision(personnage, lst_blocs)</code></h3>
+<p>Parcourt la liste des blocs et retourne <code>True</code> dès qu'une collision est détectée via <code>_collision_bloc()</code>. Signature imposée par le projet.</p>
+
+<h3><code>choc(personnage, lst_blocs)</code></h3>
+<p>Résolution du choc mou. Pour chaque bloc en collision : (1) <em>push-out</em> : déplace le personnage hors du bloc selon la normale ; (2) détermine le côté touché (<code>|ny| ≥ |nx|</code> → haut/bas, sinon côté) ; (3) applique la réponse en vitesse selon le type de plateforme. Cette approche élimine le comportement "collant" qu'on observait lorsque la vitesse était simplement annulée sans correction de position.</p>
+
+<h3><code>clic_vers_vitesse(cx, cy, px, py)</code></h3>
+<p>Convertit la position d'un clic en vecteur vitesse. La direction va du personnage vers le clic. La puissance est proportionnelle à la distance (0 si clic sur le personnage, VMAX si distance ≥ MAX_RAYON). La normalisation garantit que la direction est indépendante de la distance.</p>
+
+<h3><code>charge_niveau(fichier)</code></h3>
+<p>Lit un fichier CSV ligne par ligne. Ligne 1 = position du personnage, ligne 2 = objectif (rectangle converti en centre + rayon), lignes suivantes = plateformes avec un 5e champ optionnel indiquant le type (<code>normale</code> par défaut).</p>
+
+<h3><code>pas_physique(personnage)</code></h3>
+<p>Applique un pas δ d'intégration d'Euler : <code>x += δ·vx</code>, <code>vx += δ·gx</code>, idem pour y/vy. Chaque frame, cette fonction est appelée N_ETAPES=10 fois pour obtenir une simulation fluide.</p>
+
+<!-- ================================================================ -->
+<h2>4. Améliorations réalisées au-delà du minimum</h2>
+
+<ul>
+  <li><strong>Correction de position (push-out)</strong> — sans ça, le mouton se collait aux plateformes.</li>
+  <li><strong>Détection du côté de collision</strong> — comportement physiquement cohérent : côté → chute libre, haut → arrêt.</li>
+  <li><strong>Plateformes spéciales</strong> — types collante et glissante avec code couleur et étiquette.</li>
+  <li><strong>Flèche de visée en 2 temps</strong> — clic gauche verrouille, clic droit lance.</li>
+  <li><strong>Traînée visuelle</strong> — points rouges mémorisent la trajectoire du saut précédent.</li>
+  <li><strong>Sprites PNG</strong> — mouton et plateau-cible en image plutôt qu'en cercles de couleur.</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2>5. Difficultés rencontrées</h2>
+
+<ul>
+  <li><strong>Collage aux plateformes</strong> — résolu en ajoutant la correction de position (push-out) dans <code>choc()</code>. Sans ça, la gravité réembède le mouton à chaque frame.</li>
+  <li><strong>Détection du côté touché</strong> — le vecteur normal de collision donne directement l'information : si <code>|ny| ≥ |nx|</code>, c'est un choc haut/bas, sinon un choc latéral.</li>
+  <li><strong>Centre dans un bloc</strong> — si le mouton passe à travers un bloc (spawn ou vitesse élevée), <code>dist = 0</code> et la normalisation diviserait par zéro. Solution : fallback SAT sur l'axe de moindre chevauchement.</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2>6. Répartition du travail</h2>
+
+<table>
+  <tr><th>Tâche</th><th>Répartition estimée</th></tr>
+  <tr><td>Fonctions physiques et collisions</td><td>[Prénom NOM] — XX %</td></tr>
+  <tr><td>Affichage et boucle de jeu</td><td>[Prénom NOM] — XX %</td></tr>
+  <tr><td>Niveaux et plateformes spéciales</td><td>Conjoint — XX %</td></tr>
+  <tr><td>Rapport</td><td>[Prénom NOM] — XX %</td></tr>
+</table>
+
+<div class="warn-box">
+  <em>À compléter avec les vrais noms, groupes et pourcentages avant le rendu final.</em>
+</div>
+
+<footer>
+  Projet L1 Informatique 2025-2026 — Université Gustave Eiffel — Saute Mouton v1 (brouillon)
+</footer>
+
+</body>
+</html>
