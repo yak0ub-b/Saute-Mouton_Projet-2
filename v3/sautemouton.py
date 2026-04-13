@@ -708,9 +708,9 @@ def dessine_hud(nb_sauts, num_niveau):
 
 
 FONDS_NIVEAUX = {
-    1: 'images/ferme.jpg',
-    2: 'images/cimetiere.jpg',
-    3: 'images/espace.jpg',
+    1: 'images/ferme.png',
+    2: 'images/cimetiere.png',
+    3: 'images/espace.png',
 }
 
 
