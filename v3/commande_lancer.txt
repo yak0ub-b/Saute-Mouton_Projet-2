@@ -1,0 +1,41 @@
+========================================================
+  SAUTE MOUTON — Commandes
+  Projet L1 Info 2025-2026 — Université Gustave Eiffel
+========================================================
+
+  LANCEMENT
+  ---------
+
+  Jeu normal :
+      python3 sautemouton.py
+
+  Solveur automatique (un niveau) :
+      python3 sautemouton.py --solve 1
+      python3 sautemouton.py --solve 2
+      python3 sautemouton.py --solve 3
+
+  Solveur automatique (tous les niveaux) :
+      python3 sautemouton.py --solve
+
+  Solveur approché (plus rapide, un niveau) :
+      python3 sautemouton.py --solve 1 --approche
+
+  Solveur optimal BFS (solution en minimum de sauts) :
+      python3 sautemouton.py --solve 1 --bfs
+
+  EN JEU
+  ------
+
+  Clic droit          Verrouiller la cible (affiche flèche + trajectoire)
+  Clic gauche         Lancer le saut
+  M                   Retour au menu
+  Echap / Fermeture   Quitter
+
+  PLATEFORMES
+  -----------
+
+  Verte              Arrêt complet au contact
+  Brune  (C)         Collante — arrêt sur toutes les faces
+  Bleue  (G)         Glissante — le mouton glisse sur la surface
+
+========================================================

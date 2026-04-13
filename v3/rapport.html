@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapport — Saute Mouton</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 24px 60px;
+      color: #222;
+      background: #f9f9f9;
+      line-height: 1.7;
+    }
+    h1 { color: #2d6a2d; font-size: 2.2em; margin-bottom: 4px; }
+    h2 { color: #2d6a2d; border-bottom: 2px solid #4caf50; padding-bottom: 4px; margin-top: 40px; }
+    h3 { color: #1a4f1a; margin-top: 28px; }
+    .meta { color: #555; font-size: 0.95em; margin-bottom: 32px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #ccc; padding: 8px 14px; text-align: left; }
+    th { background: #4caf50; color: white; }
+    tr:nth-child(even) { background: #f0f7f0; }
+    .ok   { color: #2d6a2d; font-weight: bold; }
+    .nok  { color: #c0392b; font-weight: bold; }
+    .info { color: #2980b9; font-weight: bold; }
+    code { background: #eee; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+    pre  { background: #272822; color: #f8f8f2; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.9em; }
+    kbd  { background: #333; color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 0.9em; }
+    .section { background: white; border-radius: 8px; padding: 20px 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body>
+
+<h1>Saute Mouton</h1>
+<p class="meta">
+  Projet L1 Info 2025-2026 &mdash; Université Gustave Eiffel<br>
+  <strong>Étudiants :</strong> [Nom Prénom] &amp; [Nom Prénom] &mdash; <strong>Groupe TP :</strong> [XX]
+</p>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>1. Guide utilisateur</h2>
+
+<h3>Lancement du jeu</h3>
+<pre>python3 sautemouton.py</pre>
+
+<h3>Solveur automatique</h3>
+<pre># DFS naïf — un niveau
+python3 sautemouton.py --solve 1
+
+# DFS naïf — tous les niveaux enchaînés
+python3 sautemouton.py --solve
+
+# DFS approché (plus rapide)
+python3 sautemouton.py --solve 1 --approche
+
+# BFS optimal (solution en minimum de sauts)
+python3 sautemouton.py --solve 1 --bfs</pre>
+
+<h3>Contrôles en jeu</h3>
+<table>
+  <tr><th>Action</th><th>Commande</th></tr>
+  <tr><td>Viser (afficher la flèche + trajectoire)</td><td>Clic droit dans la fenêtre</td></tr>
+  <tr><td>Lancer le saut</td><td>Clic gauche (après avoir visé)</td></tr>
+  <tr><td>Retour au menu</td><td>Touche <kbd>M</kbd></td></tr>
+  <tr><td>Quitter</td><td><kbd>Échap</kbd> ou croix de la fenêtre</td></tr>
+</table>
+
+<h3>Règles du jeu</h3>
+<ul>
+  <li>Le mouton est soumis à la gravité en permanence.</li>
+  <li>Cliquez <strong>à droite</strong> pour pointer la direction du saut (la trajectoire prévisionnelle s'affiche), puis cliquez <strong>à gauche</strong> pour valider.</li>
+  <li>La puissance du saut est proportionnelle à la distance entre le mouton et le point visé, plafonnée à <code>VMAX = 13</code>.</li>
+  <li>Le niveau est gagné quand le mouton atteint la cible dorée.</li>
+</ul>
+
+<h3>Types de plateformes</h3>
+<table>
+  <tr><th>Couleur</th><th>Lettre</th><th>Comportement</th></tr>
+  <tr><td>Verte</td><td>—</td><td>Arrêt complet au contact (choc mou : vx = vy = 0)</td></tr>
+  <tr><td>Marron</td><td>C</td><td>Collante — arrêt sur toutes les faces</td></tr>
+  <tr><td>Bleue</td><td>G</td><td>Glissante — le mouton glisse sur la surface</td></tr>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>2. État d'avancement</h2>
+
+<table>
+  <tr><th>Fonctionnalité</th><th>Statut</th><th>Remarques</th></tr>
+  <tr><td>Fenêtre 800×600, affichage de base</td><td class="ok">✓ Terminé</td><td></td></tr>
+  <tr><td><code>charge_niveau()</code> — lecture fichiers .txt</td><td class="ok">✓ Terminé</td><td>Format CSV, 3 types de blocs</td></tr>
+  <tr><td><code>pas_physique()</code> — gravité</td><td class="ok">✓ Terminé</td><td>Équations imposées respectées</td></tr>
+  <tr><td><code>collision()</code> + <code>choc()</code></td><td class="ok">✓ Terminé</td><td>Push-out + 3 comportements de surface</td></tr>
+  <tr><td><code>clic_vers_vitesse()</code> — visée souris</td><td class="ok">✓ Terminé</td><td>Vitesse proportionnelle, plafonnée</td></tr>
+  <tr><td><code>victoire()</code> — détection arrivée</td><td class="ok">✓ Terminé</td><td>Collision cercle-cercle</td></tr>
+  <tr><td>3 niveaux jouables</td><td class="ok">✓ Terminé</td><td>Niveaux 1, 2, 3 chargés depuis fichiers</td></tr>
+  <tr><td>Graphismes — sprites PNG</td><td class="ok">✓ Terminé</td><td>Mouton, cible, fond ciel/herbe, bannière</td></tr>
+  <tr><td>Menu de sélection de niveau</td><td class="ok">✓ Terminé</td><td>Bannière + 3 boutons ; touche M en jeu</td></tr>
+  <tr><td>Compteur de sauts (HUD)</td><td class="ok">✓ Terminé</td><td>Affiché en haut, réinitialisé à chaque niveau</td></tr>
+  <tr><td>Plateformes spéciales (collante / glissante)</td><td class="ok">✓ Terminé</td><td>Couleurs + lettre indicatrice</td></tr>
+  <tr><td>Traînée rouge du mouton</td><td class="ok">✓ Terminé</td><td>Points accumulés pendant les sauts</td></tr>
+  <tr><td>Trajectoire prévisionnelle <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Courbe simulée avant le tir, affichage en temps réel</td></tr>
+  <tr><td>Solveur DFS naïf <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Backtracking récursif, commande <code>--solve N</code></td></tr>
+  <tr><td>Solveur approché <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Positions <code>x//a</code>, vitesses par pas <code>b</code>, <code>--approche</code></td></tr>
+  <tr><td>Tracé des positions explorées <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Points bleus affichés en temps réel pendant la recherche</td></tr>
+  <tr><td>Solveur BFS optimal <em>(⋆⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>File FIFO, solution en minimum de sauts, <code>--bfs</code></td></tr>
+  <tr><td>Rapport HTML</td><td class="ok">✓ Terminé</td><td>Ce fichier</td></tr>
+</table>
+
+<p><strong>Bugs connus :</strong> aucun bug bloquant identifié. La valeur de <code>VMAX</code> a été portée à 13 (au lieu de 10 dans les consignes) pour rendre le jeu plus jouable sur les niveaux 2 et 3.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>3. Description des fonctions importantes</h2>
+
+<h3><code>charge_niveau(fichier)</code></h3>
+<p>Lit un fichier <code>.txt</code> en CSV (valeurs séparées par des virgules). La ligne 1 donne la position de départ du mouton, la ligne 2 le rectangle englobant la cible (le centre et le rayon sont calculés automatiquement), et les lignes suivantes décrivent les blocs avec un 5e champ optionnel pour le type (<code>normale</code>, <code>collante</code>, <code>glissante</code>). Retourne <code>(personnage, objectif, lst_blocs)</code>.</p>
+
+<h3><code>pas_physique(personnage)</code></h3>
+<p>Applique un pas de temps <code>δ = PAS = 0.1</code> aux équations de mouvement imposées :</p>
+<pre>x  = x  + δ × vx      vx = vx + δ × gx
+y  = y  + δ × vy      vy = vy + δ × gy</pre>
+<p>Appelée <code>N_ETAPES = 10</code> fois par frame pour une simulation fluide.</p>
+
+<h3><code>collision(personnage, lst_blocs)</code></h3>
+<p>Retourne <code>True</code> si le cercle du personnage (rayon <code>RAYON_PERSO = 15</code>) intersecte au moins un rectangle de la liste. Délègue à <code>_collision_bloc()</code> qui calcule le point le plus proche du centre du cercle sur le rectangle (algorithme de clamp), puis compare la distance au rayon.</p>
+
+<h3><code>choc(personnage, lst_blocs)</code></h3>
+<p>Pour chaque bloc en collision, corrige la position (push-out selon la normale) puis annule les composantes de vitesse selon le type :</p>
+<ul>
+  <li><strong>normale</strong> : <code>vx = vy = 0</code> en haut/bas ; <code>vx = 0</code> sur les côtés.</li>
+  <li><strong>collante</strong> : <code>vx = vy = 0</code> quelle que soit la face.</li>
+  <li><strong>glissante</strong> : seulement <code>vy = 0</code> en haut/bas ; seulement <code>vx = 0</code> sur les côtés.</li>
+</ul>
+
+<h3><code>clic_vers_vitesse(cx, cy, px, py)</code></h3>
+<p>Calcule la direction du clic par rapport au mouton et module la puissance proportionnellement à la distance (plafonnée à <code>MAX_RAYON = 150 px</code> et <code>VMAX = 13</code>). La flèche et la trajectoire prévisionnelle se mettent à jour en temps réel à chaque mouvement de souris en mode visée.</p>
+
+<h3><code>victoire(personnage, objectif)</code></h3>
+<p>Détecte la collision cercle-cercle : victoire si la distance entre les centres est inférieure à la somme des rayons (<code>RAYON_PERSO + objectif['rayon']</code>).</p>
+
+<h3><code>solveur_naif(personnage_depart, objectif, lst_blocs, callback)</code></h3>
+<p>Implémente l'algorithme de recherche en profondeur (backtracking) décrit dans le sujet. Algorithme en 4 étapes :</p>
+<ol>
+  <li>Si le personnage est à l'objectif → <code>True</code>.</li>
+  <li>Si la position est dans <code>visite</code> → <code>False</code> ; sinon l'ajouter.</li>
+  <li>Pour chaque direction discrète <code>(vx, vy)</code> : simuler le saut, récurser, backtracker.</li>
+  <li>Retourner <code>False</code>.</li>
+</ol>
+<p>Retourne <code>(chemin, positions_explorees)</code> où <code>chemin</code> est la liste des coups à jouer. Le paramètre optionnel <code>callback</code> est appelé toutes les <code>FREQ_AFFICHAGE</code> nouvelles positions pour l'affichage en temps réel.</p>
+
+<h3><code>solveur_approche(personnage_depart, objectif, lst_blocs, a, b, callback)</code></h3>
+<p>Variante approchée du DFS avec deux approximations : les positions sont regroupées par cellules de taille <code>a</code> (<code>int(x)//a</code>), et les vitesses sont testées par incrément <code>b</code> au lieu d'être toutes testées. Paramètres par défaut : <code>a = APPROX_POS = 20</code>, <code>b = APPROX_VIT = 3</code>. Plus rapide mais peut rater des niveaux nécessitant une précision au pixel.</p>
+
+<h3><code>solveur_bfs(personnage_depart, objectif, lst_blocs, callback)</code></h3>
+<p>Recherche en largeur (BFS) avec une <code>deque</code> (file FIFO). Explore les états niveau par niveau (1 saut, puis 2 sauts, etc.). La première solution trouvée est garantie optimale en nombre de sauts. Chaque état dans la file est un tuple <code>(perso, chemin)</code> pour reconstruire la trajectoire.</p>
+
+<h3><code>joue_solution_animee(personnage, objectif, lst_blocs, solution, ...)</code></h3>
+<p>Rejoue la liste de coups trouvée par un solveur en animant le mouton frame par frame. La stabilisation après chaque saut est détectée par déplacement nul (critère position, plus fiable que <code>collision()</code> après push-out).</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>4. Améliorations implémentées</h2>
+<ul>
+  <li><strong>3 types de plateformes</strong> : normale (verte), collante (marron, <em>C</em>), glissante (bleue, <em>G</em>) — chacune avec un comportement physique distinct.</li>
+  <li><strong>Système de visée en 2 temps</strong> : clic droit verrouille la direction et affiche la flèche + la trajectoire prévisionnelle ; clic gauche valide le saut.</li>
+  <li><strong>Trajectoire prévisionnelle</strong> : simulation avancée des N prochains pas de physique, affichée comme une courbe en pointillés avant le tir.</li>
+  <li><strong>Traînée du mouton</strong> : points rouges enregistrés pendant les sauts pour visualiser la trajectoire parcourue.</li>
+  <li><strong>Solveur DFS naïf</strong> : backtracking récursif avec ensemble <code>visite</code>, conforme à la spécification du sujet.</li>
+  <li><strong>Solveur approché</strong> : DFS avec approximation des positions et des vitesses pour une résolution plus rapide.</li>
+  <li><strong>Affichage en temps réel</strong> : les positions explorées par le solveur s'affichent sous forme de points bleus au fur et à mesure de la recherche.</li>
+  <li><strong>Solveur BFS optimal</strong> : recherche en largeur par file FIFO, garantissant la solution avec le minimum de sauts.</li>
+  <li><strong>CLI multi-mode</strong> : <code>--solve N</code>, <code>--solve</code> (tous les niveaux), <code>--approche</code>, <code>--bfs</code>.</li>
+  <li><strong>Push-out dans <code>choc()</code></strong> : le mouton est repositionné exactement à la surface du bloc pour éviter tout chevauchement.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>5. Répartition du travail</h2>
+<table>
+  <tr><th>Tâche</th><th>Membre 1 (%)</th><th>Membre 2 (%)</th></tr>
+  <tr><td>Physique (<code>pas_physique</code>, <code>collision</code>, <code>choc</code>)</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Chargement des niveaux</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Affichage et graphismes</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Menu, HUD, écran de victoire</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Trajectoire prévisionnelle</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Solveurs (DFS naïf, approché, BFS)</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Conception des niveaux (.txt)</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Rapport</td><td>50%</td><td>50%</td></tr>
+</table>
+<p><strong>Difficultés rencontrées :</strong></p>
+<ul>
+  <li>La gestion du push-out dans <code>choc()</code> : distinguer correctement la face touchée pour ne pas bloquer le mouton.</li>
+  <li>La détection de stabilisation dans <code>joue_solution_animee</code> : l'utilisation de <code>collision()</code> échouait après push-out (mouton exactement à la surface → distance = rayon → collision = False). Résolu en détectant la stabilité par variation de position nulle.</li>
+  <li>L'algorithme DFS naïf : l'ordre correct des vérifications (victoire → visite → récursion) est crucial pour ne pas couper des chemins valides.</li>
+  <li>Le réglage de <code>VMAX</code> et <code>N_ETAPES</code> pour obtenir une physique à la fois réaliste et agréable.</li>
+</ul>
+</div>
+
+</body>
+</html>
