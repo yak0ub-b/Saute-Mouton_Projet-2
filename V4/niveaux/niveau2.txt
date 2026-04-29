@@ -1,0 +1,37 @@
+# Niveau 2 — Le Cimetière
+personnage 70 527
+objectif 672.5 75 23.5
+bloc 0 0 18 600
+bloc 782 0 800 600
+bloc 0 574 800 600
+bloc 300 199 416 219
+bloc 499 51 505 130 collante
+bloc 498 163 504 231 collante
+bloc 536 165 626 189
+bloc 642 113 660 120 glissante
+bloc 98 249 218 267
+bloc 263 300 334 317
+bloc 340 221 416 226 collante
+bloc 200 55 224 161 collante
+bloc 429 289 492 294 glissante
+bloc 362 345 458 369
+bloc 174 390 344 395
+bloc 14 404 36 430
+bloc 36 429 75 461
+bloc 75 461 127 491
+bloc 127 491 220 500
+bloc 220 433 328 500
+bloc 329 432 344 501
+bloc 344 477 386 501
+bloc 386 477 408 485
+bloc 408 485 438 492
+bloc 438 492 488 500
+bloc 488 459 510 500
+bloc 344 373 406 394 collante
+bloc 70 333 190 343 collante
+bloc 2 264 7 358 collante
+bloc 518 470 574 476 glissante
+bloc 623 471 635 500 glissante
+bloc 579 523 596 544 glissante
+bloc 524 547 546 563 glissante
+bloc 463 561 504 572 glissante
