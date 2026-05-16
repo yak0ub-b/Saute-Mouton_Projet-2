@@ -1,0 +1,26 @@
+# Niveau 3 — Le Cimetière
+personnage 86 544
+objectif 39 90.5 16
+bloc 0 0 18 600
+bloc 782 0 800 600
+bloc 0 574 800 600
+bloc 197 525 326 549 glissante
+bloc 404 524 543 549 glissante
+bloc 566 470 728 496 glissante
+bloc 751 113 775 451 collante
+bloc 601 352 700 375 glissante
+bloc 601 249 698 271 glissante
+bloc 602 149 701 171 glissante
+bloc 398 349 416 447
+bloc 300 350 318 450
+bloc 200 349 219 449
+bloc 101 267 200 281 collante
+bloc 2 335 100 351
+bloc 2 300 31 311 glissante
+bloc 62 266 88 279 glissante
+bloc 125 227 217 242 glissante
+bloc 228 171 327 185 glissante
+bloc 125 115 200 133
+bloc 9 109 60 129
+bloc 71 1 90 53 collante
+bloc 85 99 98 150 collante

@@ -1,0 +1,19 @@
+# Niveau 2 — L'Espace
+personnage 50 497
+objectif 100.5 41 28.5
+bloc 0 0 18 600
+bloc 782 0 800 600
+bloc 0 574 800 600
+bloc 99 535 200 551 glissante
+bloc 249 509 352 527 glissante
+bloc 398 483 499 500 glissante
+bloc 530 462 648 481
+bloc 701 226 721 447 collante
+bloc 608 332 630 399 collante
+bloc 604 221 628 277 collante
+bloc 709 194 793 210
+bloc 580 149 650 156
+bloc 313 174 527 185 glissante
+bloc 198 150 263 165 glissante
+bloc 101 119 186 134 glissante
+bloc 23 47 149 56 collante
