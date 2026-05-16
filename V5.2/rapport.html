@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapport — Saute Mouton</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 24px 60px;
+      color: #222;
+      background: #f9f9f9;
+      line-height: 1.7;
+    }
+    h1 { color: #2d6a2d; font-size: 2.2em; margin-bottom: 4px; }
+    h2 { color: #2d6a2d; border-bottom: 2px solid #4caf50; padding-bottom: 4px; margin-top: 40px; }
+    h3 { color: #1a4f1a; margin-top: 28px; }
+    .meta { color: #555; font-size: 0.95em; margin-bottom: 32px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #ccc; padding: 8px 14px; text-align: left; }
+    th { background: #4caf50; color: white; }
+    tr:nth-child(even) { background: #f0f7f0; }
+    .ok   { color: #2d6a2d; font-weight: bold; }
+    .nok  { color: #c0392b; font-weight: bold; }
+    .info { color: #2980b9; font-weight: bold; }
+    code { background: #eee; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+    pre  { background: #272822; color: #f8f8f2; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.9em; }
+    kbd  { background: #333; color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 0.9em; }
+    .section { background: white; border-radius: 8px; padding: 20px 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body>
+
+<h1>Saute Mouton</h1>
+<p class="meta">
+  Projet L1 Info 2025-2026 &mdash; Université Gustave Eiffel<br>
+  <strong>Étudiants :</strong> Diaga Gueye &amp; Yakoub Baouche &mdash; <strong>Groupe TP :</strong> TP 6 — Groupe 11
+</p>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>1. Introduction</h2>
+<p>Ce projet a été réalisé dans le cadre de l’UE Projet 2 en première année de licence informatique.<br> L’objectif était de concevoir et d’implémenter un petit jeu vidéo en Python, <br>tout en mettant en pratique les notions de programmation vues en cours et en travaux pratiques.<br> Ce rapport a pour but de présenter le fonctionnement du jeu, les choix techniques effectués, <br>l’organisation du travail au sein du groupe ainsi que le ressenti collectif et individuel sur le déroulement du projet.
+
+
+
+ </p>
+  <h2>2. Guide utilisateur</h2>
+
+<h3>Lancement du jeu</h3>
+<pre>python3 sautemouton.py</pre>
+
+
+
+<h3>Contrôles en jeu</h3>
+<table>
+  <tr><th>Action</th><th>Commande</th></tr>
+  <tr><td>Viser (afficher la flèche + trajectoire)</td><td>Clic gauche dans la fenêtre</td></tr>
+  <tr><td>Lancer le saut</td><td>Clic droit (après avoir visé)</td></tr>
+  <tr><td>Annuler le dernier saut</td><td><kbd>Backspace</kbd> (touche Effacer)</td></tr>
+  <tr><td>Retour au menu</td><td>Touche <kbd>M</kbd></td></tr>
+  <tr><td>Quitter</td><td><kbd>Échap</kbd> ou croix de la fenêtre</td></tr>
+  <tr><td>Solveur automatique DFS</td><td>Touche <kbd>S</kbd> en jeu</td></tr>
+  <tr><td>Solveur BFS (solution optimale)</td><td>Touche <kbd>I</kbd> en jeu</td></tr>
+</table>
+
+<h3>Règles du jeu</h3>
+<ul>
+  <li>Le mouton est soumis à la gravité en permanence.</li>
+  <li>Cliquez <strong>à gauche</strong> pour pointer la direction du saut (la trajectoire prévisionnelle s'affiche), puis cliquez <strong>à droite</strong> pour valider.</li>
+  <li>La puissance du saut est proportionnelle à la distance entre le mouton et le point visé, plafonnée à <code>VMAX = 13</code>.</li>
+  <li>Le niveau est gagné quand le mouton atteint la cible dorée.</li>
+</ul>
+
+<h3>Types de plateformes</h3>
+<table>
+  <tr><th>Couleur</th><th>Lettre</th><th>Comportement</th></tr>
+  <tr><td>Marron</td><td>—</td><td>Normale — arrêt complet au contact (choc mou : vx = vy = 0)</td></tr>
+  <tr><td>Jaune</td><td>C</td><td>Collante — le mouton reste collé, quelle que soit la face touchée</td></tr>
+  <tr><td>Bleue</td><td>G</td><td>Glissante — le mouton glisse sur la surface (vy = 0 en haut/bas, vx = 0 sur les côtés)</td></tr>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>3. État d'avancement</h2>
+
+<table>
+  <tr><th>Fonctionnalité</th><th>Statut</th><th>Remarques</th></tr>
+  <tr><td>Fenêtre 800×600, affichage de base</td><td class="ok">✓ Terminé</td><td></td></tr>
+  <tr><td><code>charge_niveau()</code> — lecture fichiers .txt</td><td class="ok">✓ Terminé</td><td>Format mots-clés (personnage/objectif/bloc), 3 types de blocs</td></tr>
+  <tr><td><code>pas_physique()</code> — gravité</td><td class="ok">✓ Terminé</td><td>Équations imposées respectées</td></tr>
+  <tr><td><code>collision()</code> + <code>choc()</code></td><td class="ok">✓ Terminé</td><td>Push-out + 3 comportements de surface</td></tr>
+  <tr><td><code>clic_vers_vitesse()</code> — visée souris</td><td class="ok">✓ Terminé</td><td>Vitesse proportionnelle, plafonnée</td></tr>
+  <tr><td><code>victoire()</code> — détection arrivée</td><td class="ok">✓ Terminé</td><td>Collision cercle-cercle</td></tr>
+  <tr><td>3 niveaux jouables</td><td class="ok">✓ Terminé</td><td>Niveaux 1, 2, 3 chargés depuis fichiers</td></tr>
+  <tr><td>Graphismes — sprites PNG</td><td class="ok">✓ Terminé</td><td>Mouton, cible, fond ciel/herbe, bannière</td></tr>
+  <tr><td>Menu de sélection de niveau</td><td class="ok">✓ Terminé</td><td>Bannière + 3 boutons ; touche M en jeu</td></tr>
+  <tr><td>Compteur de sauts + score (HUD)</td><td class="ok">✓ Terminé</td><td>Solo : sauts totaux + ★ record ; Duo : compteurs J1 / J2 séparés</td></tr>
+  <tr><td>Tableau des records sur le menu <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Badge doré ★ Record affiché à côté de chaque niveau, avec le meilleur nombre de sauts persisté entre les sessions</td></tr>
+  <tr><td>Plateformes spéciales (collante / glissante)</td><td class="ok">✓ Terminé</td><td>Couleurs + lettre indicatrice</td></tr>
+  <tr><td>Traînée rouge du mouton</td><td class="ok">✓ Terminé</td><td>Points accumulés pendant les sauts</td></tr>
+  <tr><td>Trajectoire prévisionnelle <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Courbe simulée avant le tir, affichage en temps réel</td></tr>
+  <tr><td>Solveur DFS naïf <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>DFS itératif avec pile, activable via touche <kbd>S</kbd> en jeu</td></tr>
+  <tr><td>Tracé des positions explorées <em>(⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Points bleus affichés en temps réel pendant la recherche</td></tr>
+  <tr><td>Solveur BFS optimal <em>(⋆⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>File FIFO, solution en minimum de sauts, activable via touche <kbd>I</kbd> en jeu</td></tr>
+  <tr><td>Annulation du dernier saut (<kbd>Backspace</kbd>)</td><td class="ok">✓ Terminé</td><td>Historique des états, retour arrière illimité</td></tr>
+  <tr><td>Mode 2 joueurs (Duo) <em>(⋆⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Disponible sur les 3 niveaux ; alternance tour par tour, compteurs indépendants, écran victoire avec scores</td></tr>
+  <tr><td>Meilleur parcours (traînée dorée) <em>(⋆⋆ bonus)</em></td><td class="ok">✓ Terminé</td><td>Trail doré persistant entre les sessions via <code>records.json</code></td></tr>
+  <tr><td>Rapport HTML</td><td class="ok">✓ Terminé</td><td>Ce fichier</td></tr>
+</table>
+
+<p><strong>Bugs connus :</strong> aucun bug bloquant identifié. La valeur de <code>VMAX</code> a été portée à 13 (au lieu de 10 dans les consignes) pour rendre le jeu plus jouable sur les niveaux 2 et 3.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>4. Description des fonctions importantes</h2>
+
+<h3><code>charge_niveau(fichier)</code></h3>
+<p>Lit un fichier <code>.txt</code> avec mots-clés séparés par des espaces. Chaque ligne commence par un mot-clé : <code>personnage x y</code> pour la position de départ, <code>objectif x y rayon</code> pour la cible, <code>bloc ax ay bx by [type]</code> pour une plateforme (type optionnel : <code>normale</code>, <code>collante</code>, <code>glissante</code>). Les lignes vides et commentaires (<code>#</code>) sont ignorés. Retourne <code>(personnage, objectif, lst_blocs)</code>.</p>
+
+<h3><code>pas_physique(personnage)</code></h3>
+<p>Applique un pas de temps <code>δ = PAS = 0.1</code> aux équations de mouvement imposées :</p>
+<pre>x  = x  + δ × vx      vx = vx + δ × gx
+y  = y  + δ × vy      vy = vy + δ × gy</pre>
+<p>Appelée <code>N_ETAPES = 10</code> fois par frame pour une simulation fluide.</p>
+
+<h3><code>collision(personnage, lst_blocs)</code></h3>
+<p>Retourne <code>True</code> si le cercle du personnage (rayon <code>RAYON_PERSO = 15</code>) intersecte au moins un rectangle de la liste. Délègue à <code>_collision_bloc()</code> qui calcule le point le plus proche du centre du cercle sur le rectangle (algorithme de clamp), puis compare la distance au rayon.</p>
+
+<h3><code>choc(personnage, lst_blocs)</code></h3>
+<p>Pour chaque bloc en collision, corrige la position (push-out selon la normale) puis annule les composantes de vitesse selon le type :</p>
+<ul>
+  <li><strong>normale</strong> : <code>vx = vy = 0</code> en haut/bas ; <code>vx = 0</code> sur les côtés.</li>
+  <li><strong>collante</strong> : <code>vx = vy = 0</code> quelle que soit la face.</li>
+  <li><strong>glissante</strong> : seulement <code>vy = 0</code> en haut/bas ; seulement <code>vx = 0</code> sur les côtés.</li>
+</ul>
+
+<h3><code>clic_vers_vitesse(cx, cy, px, py)</code></h3>
+<p>Calcule la direction du clic par rapport au mouton et module la puissance proportionnellement à la distance (plafonnée à <code>MAX_RAYON = 150 px</code> et <code>VMAX = 13</code>). La flèche et la trajectoire prévisionnelle se mettent à jour en temps réel à chaque mouvement de souris en mode visée.</p>
+
+<h3><code>victoire(personnage, objectif)</code></h3>
+<p>Détecte la collision cercle-cercle : victoire si la distance entre les centres est inférieure à la somme des rayons (<code>RAYON_PERSO + objectif['rayon']</code>).</p>
+
+<h3><code>solveur_naif(personnage_depart, objectif, lst_blocs, callback)</code></h3>
+<p>Implémente l'algorithme de recherche en profondeur (DFS itératif avec pile explicite). Idée : on explore toutes les séquences de sauts possibles en profondeur d'abord — comme chercher une sortie dans un labyrinthe en allant toujours le plus loin possible avant de revenir en arrière.</p>
+<ol>
+  <li><strong>Initialisation</strong> : une pile (<code>list</code>) est créée avec l'état de départ <code>[(perso, [])]</code>. Chaque élément est un couple <em>(position du mouton, liste des sauts effectués)</em>.</li>
+  <li><strong>Boucle</strong> : on dépile le dernier état (<code>pile.pop()</code> = LIFO = DFS). Si cet état a déjà été visité (même cellule de grille), on l'ignore pour éviter les boucles infinies.</li>
+  <li><strong>Exploration</strong> : on teste les 32 × 5 = 160 directions/puissances discrètes. Pour chaque saut, on simule la physique complète jusqu'à stabilisation via <code>_simule_saut_etat()</code>. Si le mouton sort de l'écran, on abandonne ce saut. Si l'objectif est atteint, on retourne le chemin. Sinon on empile la nouvelle position.</li>
+  <li><strong>Terminaison</strong> : garantie car l'ensemble <code>visite</code> est fini (la grille de déduplication PRECISION_ETAT = 15 px découpe l'écran en cellules finies). La clé inclut aussi <code>colle</code> pour distinguer un mouton collé au mur d'un mouton en vol libre au même endroit.</li>
+</ol>
+<p>Le paramètre <code>callback</code> est appelé toutes les <code>FREQ_AFFICHAGE = 5</code> nouvelles positions pour afficher les points bleus en temps réel à l'écran pendant la recherche.</p>
+
+<h3><code>solveur_bfs(personnage_depart, objectif, lst_blocs, callback)</code></h3>
+<p>Recherche en largeur (BFS) avec une <code>deque</code> (file FIFO). Contrairement au DFS qui va en profondeur, le BFS explore tous les états à 1 saut, puis tous les états à 2 sauts, etc. La première solution trouvée est donc <strong>garantie optimale</strong> (minimum de sauts). Contrepartie : le BFS stocke beaucoup plus d'états en mémoire simultanément que le DFS.</p>
+
+<h3><code>_simule_saut_etat(depart, vx, vy, lst_blocs, objectif)</code></h3>
+<p>Fonction centrale des solveurs : simule un saut complet sans toucher à l'état visible du jeu. Applique la physique frame par frame jusqu'à l'une des trois conditions : victoire (objectif atteint), chute hors écran, ou stabilisation (le mouton ne bouge plus de moins de <code>STABLE_SEUIL = 0.3 px</code> pendant <code>STABLE_DUREE = 5</code> frames consécutives). Retourne la position finale, un booléen victoire et un booléen hors-écran.</p>
+
+<h3><code>joue_solution_animee(personnage, objectif, lst_blocs, solution, ...)</code></h3>
+<p>Rejoue la liste de coups trouvée par un solveur en animant le mouton frame par frame. La stabilisation après chaque saut est détectée par déplacement nul (critère position, plus fiable que <code>collision()</code> après push-out, car après le push-out le mouton est exactement à la surface et <code>collision()</code> retournerait <code>False</code>).</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>5. Améliorations implémentées</h2>
+<ul>
+  <li><strong>3 types de plateformes</strong> : normale (verte), collante (marron, <em>C</em>), glissante (bleue, <em>G</em>) — chacune avec un comportement physique distinct.</li>
+  <li><strong>Système de visée en 2 temps</strong> : clic gauche verrouille la direction et affiche la flèche + la trajectoire prévisionnelle ; clic droit valide le saut.</li>
+  <li><strong>Trajectoire prévisionnelle</strong> : simulation avancée des N prochains pas de physique, affichée comme une courbe en pointillés avant le tir.</li>
+  <li><strong>Traînée du mouton</strong> : points rouges enregistrés pendant les sauts pour visualiser la trajectoire parcourue.</li>
+  <li><strong>Solveur DFS naïf</strong> : DFS itératif avec pile explicite et ensemble <code>visite</code>, conforme à la spécification du sujet. Activable en jeu via touche <kbd>S</kbd>.</li>
+  <li><strong>Affichage en temps réel</strong> : les positions explorées par le solveur s'affichent sous forme de points bleus au fur et à mesure de la recherche.</li>
+  <li><strong>Solveur BFS optimal</strong> : recherche en largeur par file FIFO, garantissant la solution avec le minimum de sauts. Activable en jeu via touche <kbd>I</kbd>.</li>
+  <li><strong>Push-out dans <code>choc()</code></strong> : le mouton est repositionné exactement à la surface du bloc pour éviter tout chevauchement.</li>
+  <li><strong>Mode 2 joueurs (Duo)</strong> : disponible sur les 3 niveaux. Deux joueurs alternent les sauts sur le même mouton ; chaque joueur a un compteur indépendant. L'écran de victoire affiche les scores des deux joueurs (J1 : X sauts | J2 : Y sauts).</li>
+  <li><strong>Système de score</strong> : en mode Solo, le HUD affiche le nombre de sauts en temps réel ; l'écran de victoire récapitule le score et signale un nouveau record (★). En mode Duo, les compteurs par joueur sont affichés en permanence et rappelés à la victoire.</li>
+  <li><strong>Meilleur parcours (traînée dorée)</strong> : après chaque victoire en record, la trajectoire complète est sauvegardée dans <code>records.json</code>. Au lancement suivant, une traînée dorée s'affiche automatiquement en fond, montrant le parcours record pour chaque niveau.</li>
+  <li><strong>Solveurs DFS/BFS itératifs</strong> : <code>solveur_naif</code> et <code>solveur_bfs</code> utilisent une structure explicite (<code>list</code>/<code>deque</code>) au lieu de la récursion, évitant tout risque de <code>RecursionError</code>.</li>
+  <li><strong>Tableau des records sur le menu</strong> : un badge doré ★ s'affiche à droite de chaque bouton de niveau dès qu'un record existe pour ce niveau. Les données sont lues depuis <code>records.json</code> au lancement, puis mises à jour automatiquement après chaque victoire en solo battant le précédent record.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+<h2>6. Organisation du travail</h2>
+  <table>
+
+  <tr></tr><th>Tâche</th><th>Diaga Gueye (%)</th><th>Yakoub Baouche (%)</th></tr>
+  <tr><td>Structures de données (<code>personnage</code>, <code>lst_blocs</code>, <code>objectif</code>)</td><td>100%</td><td>0%</td></tr>
+  <tr><td>Physique (<code>pas_physique</code>, <code>choc</code>)</td><td>100%</td><td>0%</td></tr>
+  <tr><td>Fonctions physiques (<code>clic_vers_vitesse</code>, <code>collision</code>, <code>victoire</code>)</td><td>100%</td><td>0%</td></tr>
+  <tr><td>Affichage FLTK (personnage, blocs, objectif)</td><td>0%</td><td>100%</td></tr>
+  <tr><td>Interactions souris (clic gauche / clic droit)</td><td>0%</td><td>100%</td></tr>
+  <tr><td>Menu de sélection et écran de victoire</td><td>0%</td><td>100%</td></tr>
+  <tr><td>Intégration physique + affichage</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Solveurs (DFS naïf, BFS optimal)</td><td>0%</td><td>100%</td></tr>
+  <tr><td>Tests et debug</td><td>50%</td><td>50%</td></tr>
+  <tr><td>Conception des niveaux (.txt)</td><td>0%</td><td>100%</td></tr>
+  <tr><td>Sauvegarde des records</td><td>100%</td><td>0%</td></tr>
+  <tr><td>Rapport HTML</td><td>50%</td><td>50%</td></tr>
+</table>
+<p>Dans l'ensemble le travail est réparti de la manière suivante :<br>
+<ul>
+  <li>60% à Yakoub Baouche</li>
+  <li>40% à Diaga Gueye</li>
+</ul>
+<p><strong>Communication et synchronisation :</strong></p>
+La communication entre les membres du groupe s’est principalement effectuée via WhatsApp. Cet outil nous a permis d’échanger rapidement sur l’avancement du projet, de discuter des améliorations possibles et de signaler les difficultés rencontrées.
+
+Pour la synchronisation du code et la gestion des différentes versions du projet, nous avons utilisé GitHub. Tous les fichiers du projet y étaient déposés, ce qui a facilité le partage du code, l’intégration des différentes parties et le suivi des modifications apportées par chacun.
+</p>
+<p><strong>Difficultés rencontrées :</strong></p>
+<ul>
+  <li>La gestion du push-out dans <code>choc()</code> : distinguer correctement la face touchée pour ne pas bloquer le mouton.</li>
+  <li>La détection de stabilisation dans <code>joue_solution_animee</code> : l'utilisation de <code>collision()</code> échouait après push-out (mouton exactement à la surface → distance = rayon → collision = False). Résolu en détectant la stabilité par variation de position nulle.</li>
+  <li>L'algorithme DFS naïf : l'ordre correct des vérifications (victoire → visite → récursion) est crucial pour ne pas couper des chemins valides.</li>
+  <li>Le réglage de <code>VMAX</code> et <code>N_ETAPES</code> pour obtenir une physique à la fois réaliste et agréable.</li>
+</ul>
+<p><strong>Ressentis personnels:</strong></p>
+<p><strong>DIAGA GUEYE:</strong></p>
+Ce projet a été une excellente opportunité de mettre en pratique les concepts théoriques abordés en cours d'informatique et de mathématiques, en particulier la physique et la gestion des structures de données.<br>
+
+La conception des fonctions de base telles que pas_physique et choc m'a permis de mieux comprendre comment modéliser un environnement réaliste avec la gravité et les différents types de collisions.Malgré les difficultés rencontrées notamment sur la partie physique, ce fut un réel défi d'ajuster les équations pour que le comportement du mouton reste fluide tout en respectant les consignes imposées, notamment lors du push-out sur les plateformes.<br>
+
+Travailler sur le système de sauvegarde des records m'a également permis d'explorer la persistance des données via le format JSON, ce qui ajoute une dimension très gratifiante et interactive au jeu avec la traînée dorée et l'affichage des records. Malgré les quelques difficultés rencontrées lors de la gestion des états et du débogage, <br>cette expérience de groupe a été très enrichissante et formatrice pour la suite de notre cursus.
+<p><strong>YAKOUB BAOUCHE:</strong></p>
+Ce projet m'a permis de me confronter à des problèmes concrets que l'on ne rencontre pas en exercices classiques. La partie la plus complexe a été la gestion de l'affichage : comme FLTK redessine intégralement la fenêtre à chaque frame, l'accumulation d'images (mouton, cible, bannière, traînées) générait des bugs visuels importants, surtout lors des phases de solveur ou quand beaucoup d'éléments s'affichaient simultanément. Trouver le bon ordre d'effacement et de redessin a demandé beaucoup d'essais. Le solveur a également été un défi : les premières versions exploraient trop d'états et saturaient la mémoire ou devenaient trop lentes pour être utilisables. L'introduction de la grille de déduplication (<code>PRECISION_ETAT</code>) a été la clé pour rendre l'exploration viable. Dans l'ensemble, ce projet m'a appris autant sur la gestion des états que sur le débogage en situation réelle.<br>
+<p><strong>Ressentis Collectifs:</strong></p>
+Dans l'ensemble, la réalisation de ce projet a été une expérience très enrichissante et formatrice, tant sur le plan technique qu'humain.
+
+La complémentarité de notre binôme nous a permis de mener à bien l'intégration entre la mécanique physique, gérée par la structure de données, et l'interface graphique. Nous avons beaucoup appris sur la gestion des états de jeu, les algorithmes de recherche de chemin (DFS, BFS) ainsi que sur la persistance des données.
+
+<p><strong>Conclusion :</strong></p>
+Ce projet nous a permis d'atteindre l'ensemble des objectifs fixés : les fonctions imposées sont toutes implémentées, les trois niveaux sont jouables, et plusieurs bonus significatifs ont été ajoutés (solveurs DFS et BFS, mode 2 joueurs, traînée dorée, tableau des records). Sur le plan technique, nous avons approfondi notre compréhension de la physique discrète, des algorithmes de recherche de chemin, et de la persistance des données en JSON. La collaboration au sein du binôme a été fluide grâce à une répartition claire des responsabilités et une communication régulière via WhatsApp et GitHub. Ce projet restera une expérience fondatrice dans notre parcours en informatique.
+</div>
+
+<!-- ============================================================ -->
+</body>
+</html>

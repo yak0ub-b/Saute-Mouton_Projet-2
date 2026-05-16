@@ -1,0 +1,19 @@
+# Niveau 3 — L'Espace
+personnage 32 543
+objectif 531 130.5 79
+bloc 0 0 18 600
+bloc 782 0 800 600
+bloc 0 574 800 600
+bloc 119 523 226 535
+bloc 294 499 428 505
+bloc 462 443 470 448
+bloc 0 262 30 416 collante
+bloc 177 172 246 305 collante
+bloc 370 163 587 166 glissante
+bloc 129 379 273 394
+bloc 396 327 550 375
+bloc 376 441 405 451
+bloc 596 466 662 471
+bloc 274 453 334 461
+bloc 322 397 347 404
+bloc 72 321 123 326
